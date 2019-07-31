@@ -14,4 +14,8 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'NewsController@list')->name('home');
+Route::group(['prefix'=>'articles','as'=>'articles.'], function(){
+    Route::get('/articles/{$id}-', ['as' => 'show', 'uses' => 'NewsController@show']);
+});
+

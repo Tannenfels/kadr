@@ -17,7 +17,8 @@ class NewsController extends Controller
     public function list(){
         $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
 
-        return view('news.list', compact('news'));
+        return view('news.list', compact('news'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);;
     }
 
 
@@ -28,11 +29,8 @@ class NewsController extends Controller
      */
 
     public function create()
-
     {
-
-        return view('products.create');
-
+        return view('articles.create');
     }
 
 
@@ -45,9 +43,7 @@ class NewsController extends Controller
      */
 
     public function store(Request $request)
-
     {
-
         $request->validate([
 
             'name' => 'required',
@@ -88,11 +84,8 @@ class NewsController extends Controller
      */
 
     public function edit(News $news)
-
     {
-
         return view('products.edit',compact('product'));
-
     }
 
 
@@ -107,27 +100,16 @@ class NewsController extends Controller
      */
 
     public function update(Request $request, News $news)
-
     {
-
         $request->validate([
-
             'name' => 'required',
-
             'detail' => 'required',
-
         ]);
-
-
 
         $news->update($request->all());
 
-
-
         return redirect()->route('products.index')
-
             ->with('success','News updated successfully');
-
     }
 
 
@@ -142,16 +124,10 @@ class NewsController extends Controller
      */
 
     public function destroy(News $news)
-
     {
-
         $news->delete();
 
-
-
         return redirect()->route('products.index')
-
             ->with('success','News deleted successfully');
-
     }
 }
