@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-
-
 @section('content')
 
     <div class="row">
@@ -21,19 +19,16 @@
 
     <table class="table table-bordered">
         <tr>
-            <th>No</th>
-            <th>Name</th>
-            <th>Details</th>
-            <th width="280px">Action</th>
+            <th>Заголовок</th>
+            <th>Описание</th>
         </tr>
 
         @foreach ($news as $n)
             <tr>
-                <td>{{ ++$i }}</td>
-                <td>{{ $n->name }}</td>
-                <td>{{ $n->detail }}</td>
+                <td>{{ $n->title }}</td>
+                <td>{{ $n->description }}</td>
                 <td>
-                    <a class="btn btn-info" href="{{ route('articles.show',$n->id) }}">Show</a>
+                    <a class="btn btn-info" href="{{ route('show',$n->id) }}">Show</a>
                 </td>
             </tr>
         @endforeach

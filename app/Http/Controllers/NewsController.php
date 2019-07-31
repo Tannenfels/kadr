@@ -16,9 +16,7 @@ class NewsController extends Controller
 
     public function list(){
         $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
-
-        return view('news.list', compact('news'))
-            ->with('i', (request()->input('page', 1) - 1) * 10);;
+        return view('news.list', compact('news'));
     }
 
 
@@ -45,11 +43,8 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
             'name' => 'required',
-
             'detail' => 'required',
-
         ]);
 
         News::create($request->all());
@@ -69,6 +64,7 @@ class NewsController extends Controller
 
     public function show(int $id)
     {
+        dd($id);
         $article = News::findOrFail($id);
 
         return view('news.show',compact('article'));
