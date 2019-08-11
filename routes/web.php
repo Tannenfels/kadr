@@ -10,14 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/articles/{id}', 'NewsController@show')->name('show');
 
 
-
-
-Route::get('articles/{$id}', 'NewsController@show')->name('show');
+Route::get('/page-id-{id}.html', 'NewsController@legacyShow');
+Route::get('/page.php?id={id}', 'NewsController@legacyShow');
 
 Auth::routes();
 
 Route::get('/', 'NewsController@list')->name('home');
-
-
