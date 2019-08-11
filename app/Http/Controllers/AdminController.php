@@ -29,6 +29,17 @@ class AdminController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+
+    public function create()
+    {
+        return view('articles.create');
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param News $news
@@ -62,8 +73,6 @@ class AdminController extends Controller
         return redirect()->route('products.index')
             ->with('success','News updated successfully');
     }
-
-
 
     /**
      * Remove the specified resource from storage.

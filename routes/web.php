@@ -14,7 +14,7 @@ Route::get('/articles/{id}', 'NewsController@show')->name('show');
 
 
 Route::get('/page-id-{id}.html', 'NewsController@legacyShow');
-Route::get('/page.php?id={id}', 'NewsController@legacyShow');
+Route::get('/page.php', 'NewsController@legacyUnpluginedShow');
 
 Auth::routes();
 

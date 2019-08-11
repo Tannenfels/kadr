@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\News;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class NewsController extends Controller
@@ -18,19 +19,6 @@ class NewsController extends Controller
         $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('news.list', compact('news'));
     }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-
-    public function create()
-    {
-        return view('articles.create');
-    }
-
 
     /**
      * Display the specified resource.
@@ -53,8 +41,21 @@ class NewsController extends Controller
      * @return Response
      */
 
-    public function legacyShow(int $id)
+    public function legacyPluginShow(int $id)
     {
+        return redirect()->route('show', ['id' => $id]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @return Response
+     */
+
+    public function legacyUnpluginedShow(Request $request)
+    {
+        $id = $request->all()['id'];
         return redirect()->route('show', ['id' => $id]);
     }
 }
