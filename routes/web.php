@@ -19,3 +19,12 @@ Route::get('/page.php', 'NewsController@legacyUnpluginedShow');
 Auth::routes();
 
 Route::get('/', 'NewsController@list')->name('home');
+Route::redirect('/home', '/');
+Route::get('/admin', 'AdminController@dashboard')->middleware('admin');
+
+Route::middleware('admin')->group(function () {
+    Route::get('/admin', 'AdminController@dashboard')->name('admin.dashboard');
+
+    Route::get('/admin/destroy', 'AdminController@destroyNews')->name('admin.destroyNews');
+    Route::get('/admin/edit_article/{id}', 'AdminController@editNews')->name('admin.editNews');
+});

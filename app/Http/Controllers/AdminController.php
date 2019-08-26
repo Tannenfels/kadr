@@ -3,11 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\News;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function dashboard(Request $request){
+        $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.dashboard', compact('news'));
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -18,13 +30,25 @@ class AdminController extends Controller
     public function storeNews(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'detail' => 'required',
+            'title' => 'required',
+            'text' => 'required',
         ]);
 
-        News::create($request->all());
+        $title = $request->only('title');
+        $description = $request->only('description');
+        $text = $request->only('text');
+        $author = Auth::user()->name;
 
-        return redirect()->route('products.index')
+        DB::table('news')->insert(
+            array(
+                'title' => $title,
+                'description' => $description,
+                'text' => $text,
+                'author' => $author
+            )
+        );
+
+        return redirect()->route('/admin')
             ->with('success','News created successfully.');
     }
 
@@ -87,7 +111,7 @@ class AdminController extends Controller
     {
         $news->delete();
 
-        return redirect()->route('products.index')
+        return redirect()->route('admin.dashboard')
             ->with('success','News deleted successfully');
     }
 }
