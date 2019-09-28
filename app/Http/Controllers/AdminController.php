@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -20,6 +21,7 @@ class AdminController extends Controller
         $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('admin.dashboard', compact('news'));
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -113,5 +115,24 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard')
             ->with('success','News deleted successfully');
+    }
+
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function usersDashboard(Request $request){
+        $users = User::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.usersDashboard', compact('users'));
+    }
+
+    /**
+     * @param User $user
+     * @return Factory|View
+     */
+    public function editUser(User $user){
+        $id = $user->id;
+
+        return view('editUser', compact('id'));
     }
 }

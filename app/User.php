@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -35,4 +36,26 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(User $user){
+        return in_array('admin', explode(',', Auth::user()->user_groups));
+    }
+
+    public function isChiefEditor(){
+        if (Auth::user() && in_array('admin', explode(',', Auth::user()->user_groups))){
+            return true;
+        }
+        return in_array('chief_editor', explode(',', Auth::user()->user_groups));
+    }
+
+    public function isAuthor(){
+
+    }
+
+    public function isEditor(){
+
+    }
 }
