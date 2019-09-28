@@ -21,14 +21,16 @@ Auth::routes();
 Route::get('/', 'NewsController@list')->name('home');
 Route::redirect('/home', '/');
 Route::get('/admin', 'AdminController@dashboard')->middleware('admin');
-Route::get('/users/{id}', 'AdminController@dashboard')->middleware('admin');
+Route::get('/users/{id}', 'UserController@show')->name('user.show')->middleware('auth');
 
 Route::middleware('admin')->group(function () {
     Route::get('/admin', 'AdminController@dashboard')->name('admin.dashboard');
 
-    Route::get('/admin/destroy', 'AdminController@destroyNews')->name('admin.destroyNews');
-    Route::get('/admin/edit_article/{id}', 'AdminController@editNews')->name('admin.editNews');
+    Route::get('/admin/destroy', 'AdminController@destroyNews')->name('admin.news.destroy');
+    Route::get('/admin/edit_article/{id}', 'AdminController@editNews')->name('admin.news.edit');
+    Route::post('/admin/create_article', 'AdminController@storeNews')->name('admin.news.store');
 
-    Route::get('/admin/users', 'AdminController@usersDashboard')->name('admin.usersDashboard');
-    Route::get('/admin/users/{id}', 'AdminController@dashboard')->name('admin.dashboard');
+    Route::get('/admin/users', 'AdminController@usersDashboard')->name('admin.user.dashboard');
+    Route::get('/admin/users/{id}', 'AdminController@editUser')->name('admin.user.edit');
+    Route::get('/admin/users/{id}', 'AdminController@updateUser')->name('admin.user.update');
 });

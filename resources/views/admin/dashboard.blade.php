@@ -28,9 +28,9 @@
                 <td>{{ $n->title }}</td>
                 <td>{{ $n->description }}</td>
                 <td>
-                    <form action="{{ route('admin.destroyNews',$n->id) }}" method="POST">
+                    <form action="{{ route('admin.news.destroy',$n->id) }}" method="POST">
                         <a class="btn btn-info" href="{{ route('show',$n->id) }}">Show</a>
-                        <a class="btn btn-primary" href="{{ route('admin.editNews',$n->id) }}">Edit</a>
+                        <a class="btn btn-primary" href="{{ route('admin.news.edit',$n->id) }}">Edit</a>
                         @csrf
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
