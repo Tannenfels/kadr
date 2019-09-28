@@ -32,5 +32,5 @@ Route::middleware('admin')->group(function () {
 
     Route::get('/admin/users', 'AdminController@usersDashboard')->name('admin.user.dashboard');
     Route::get('/admin/users/{id}', 'AdminController@editUser')->name('admin.user.edit');
-    Route::get('/admin/users/{id}', 'AdminController@updateUser')->name('admin.user.update');
+    Route::get('/admin/users/update', 'AdminController@updateUser')->name('admin.user.update');
 });

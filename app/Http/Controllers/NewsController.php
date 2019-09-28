@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\News;
+use Genert\BBCode\BBCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -30,6 +31,10 @@ class NewsController extends Controller
     public function show(int $id)
     {
         $article = News::findOrFail($id);
+
+        $bbCode = new BBCode();
+
+        $article->text = $bbCode->convertToHtml($article->text);
 
         return view('news.show',compact('article'));
     }

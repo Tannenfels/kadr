@@ -24,7 +24,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Details:</strong>
-                {{ $article->text }}
+                {!! html_entity_decode($article->text) !!}
             </div>
         </div>
     </div>
