@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>25-kadr.com</h2>
+                <h2>Список пользователей</h2>
             </div>
         </div>
     </div>
@@ -19,24 +19,26 @@
 
     <table class="table table-bordered">
         <tr>
-            <th>Заголовок</th>
-            <th>Описание</th>
+            <th>ID</th>
+            <th>Имя пользователя</th>
+            <th>e-mail</th>
         </tr>
 
         @foreach ($users as $user)
             <tr>
-                <td>{{ $user->title }}</td>
-                <td>{{ $user->description }}</td>
+                <td>{{ $user->id }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
                 <td>
-                    <a class="btn btn-info" href="{{ route('show',$user->id) }}">Show</a>
-                    <a class="btn btn-primary" href="{{ route('admin.editNews',$user->id) }}">Edit</a>
+                    <a class="btn btn-info" href="{{ route('user.show',$user->id) }}">Show</a>
+                    <a class="btn btn-primary" href="{{ route('admin.user.edit',$user->id) }}">Edit</a>
                         @csrf
                 </td>
             </tr>
         @endforeach
     </table>
 
-    {!! $news->links() !!}
+    {!! $users->links() !!}
 
 
 @endsection

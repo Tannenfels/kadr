@@ -50,8 +50,8 @@ class AdminController extends Controller
             )
         );
 
-        return redirect()->route('/admin')
-            ->with('success','News created successfully.');
+        return redirect()->route('admin.dashboard')
+            ->with('success','Article created successfully.');
     }
 
     /**
@@ -62,7 +62,7 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('articles.create');
+        return view('news.create');
     }
 
     /**
@@ -74,7 +74,7 @@ class AdminController extends Controller
 
     public function editNews(News $news)
     {
-        return view('products.edit',compact('product'));
+        return view('news.edit',compact('news'));
     }
 
 
@@ -96,8 +96,8 @@ class AdminController extends Controller
 
         $news->update($request->all());
 
-        return redirect()->route('products.index')
-            ->with('success','News updated successfully');
+        return redirect()->route('admin.dashboard')
+            ->with('success','Article updated successfully');
     }
 
     /**
@@ -114,7 +114,7 @@ class AdminController extends Controller
         $news->delete();
 
         return redirect()->route('admin.dashboard')
-            ->with('success','News deleted successfully');
+            ->with('success','Article deleted successfully');
     }
 
     /**
@@ -123,7 +123,7 @@ class AdminController extends Controller
      */
     public function usersDashboard(Request $request){
         $users = User::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.usersDashboard', compact('users'));
+        return view('admin.user.dashboard', compact('users'));
     }
 
     /**
