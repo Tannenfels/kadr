@@ -7,7 +7,7 @@ use Genert\BBCode\BBCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class NewsController extends Controller
+class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -62,5 +62,17 @@ class NewsController extends Controller
     {
         $id = $request->all()['id'];
         return redirect()->route('show', ['id' => $id]);
+    }
+
+    public function storeComment(){
+
+    }
+
+    public function editComment(){
+
+    }
+
+    public function deleteComment(){
+
     }
 }
