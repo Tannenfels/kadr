@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\News;
+use App\Article;
+use App\Comment;
 use Genert\BBCode\BBCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
@@ -17,7 +20,7 @@ class ArticleController extends Controller
 
 
     public function list(){
-        $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        $news = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('news.list', compact('news'));
     }
 
@@ -30,7 +33,7 @@ class ArticleController extends Controller
 
     public function show(int $id)
     {
-        $article = News::findOrFail($id);
+        $article = Article::findOrFail($id);
 
         $bbCode = new BBCode();
 
@@ -64,12 +67,31 @@ class ArticleController extends Controller
         return redirect()->route('show', ['id' => $id]);
     }
 
-    public function storeComment(){
+    public function storeComment(Request $request){
+        $request->validate([
+            'text' => 'required',
+            'article_id' => 'required'
+        ]);
+        $text = htmlspecialchars((string)$request->only('text'));
+        $articleId = htmlspecialchars((int)$request->only('article_id'));
+        $author = Auth::user()->name;
 
+        DB::table('news')->insert(
+            array(
+                'text' => $text,
+                'author' => $author,
+                'article_id' => $articleId
+            )
+        );
+
+        return back();
     }
 
-    public function editComment(){
-
+    public function editComment(Request $request){
+        $request->validate([
+            'text' => 'required',
+            'comment_id' => 'required'
+        ]);
     }
 
     public function deleteComment(){

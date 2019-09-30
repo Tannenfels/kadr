@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\News;
+use App\Article;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,7 +18,7 @@ class AdminController extends Controller
      * @return Factory|View
      */
     public function dashboard(Request $request){
-        $news = News::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        $news = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('admin.dashboard', compact('news'));
     }
 
@@ -68,11 +68,11 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param News $news
+     * @param Article $news
      * @return Response
      */
 
-    public function editNews(News $news)
+    public function editNews(Article $news)
     {
         return view('news.edit',compact('news'));
     }
@@ -83,11 +83,11 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request $request
-     * @param News $news
+     * @param Article $news
      * @return Response
      */
 
-    public function updateNews(Request $request, News $news)
+    public function updateNews(Request $request, Article $news)
     {
         $request->validate([
             'name' => 'required',
@@ -103,13 +103,13 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param News $news
+     * @param Article $news
      * @return Response
      *
      * @throws \Throwable
      */
 
-    public function destroyNews(News $news)
+    public function destroyNews(Article $news)
     {
         $news->delete();
 

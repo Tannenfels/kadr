@@ -38,6 +38,11 @@ class User extends Authenticatable
     ];
 
     /**
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
      * @return bool
      */
     public function isAdmin(User $user){
@@ -56,6 +61,10 @@ class User extends Authenticatable
     }
 
     public function isEditor(){
+
+    }
+
+    public function isBanned(){
 
     }
 }
