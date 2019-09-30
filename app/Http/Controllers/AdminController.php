@@ -36,9 +36,9 @@ class AdminController extends Controller
             'text' => 'required',
         ]);
 
-        $title = $request->only('title');
-        $description = $request->only('description');
-        $text = $request->only('text');
+        $title = htmlspecialchars((string)$request->only('title'));
+        $description = htmlspecialchars((string)$request->only('description'));
+        $text = htmlspecialchars((string)$request->only('text'));
         $author = Auth::user()->name;
 
         DB::table('news')->insert(
@@ -123,7 +123,7 @@ class AdminController extends Controller
      */
     public function usersDashboard(Request $request){
         $users = User::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.user.dashboard', compact('users'));
+        return view('admin.usersDashboard', compact('users'));
     }
 
     /**

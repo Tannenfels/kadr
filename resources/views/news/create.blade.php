@@ -23,20 +23,26 @@
         </div>
     @endif
 
-    <form action="{{ route('products.store') }}" method="POST">
+    <form action="{{ route('admin.news.store') }}" method="POST">
         @csrf
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Name:</strong>
-                    <input type="text" name="name" class="form-control" placeholder="Name">
+                    <strong>Заголовок:</strong>
+                    <input type="text" name="title" class="form-control" placeholder="Name">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
-                    <strong>Detail:</strong>
-                    <textarea class="form-control" style="height:150px" name="detail" placeholder="Detail"></textarea>
+                    <strong>Описание:</strong>
+                    <textarea class="form-control" style="height:150px" name="description" placeholder="Описание"></textarea>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Текст:</strong>
+                    <textarea class="form-control" style="height:150px" name="text" placeholder="Введите текст новости здесь"></textarea>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
