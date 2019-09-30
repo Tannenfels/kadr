@@ -7,6 +7,9 @@
             <div class="pull-left">
                 <h2>25-kadr.com</h2>
             </div>
+            <div class="pull-right">
+                <a class="btn btn-success" href="{{ route('admin.article.create') }}"> Создать новую статью</a>
+            </div>
         </div>
     </div>
 
@@ -23,14 +26,14 @@
             <th>Описание</th>
         </tr>
 
-        @foreach ($news as $n)
+        @foreach ($articles as $article)
             <tr>
-                <td>{{ $n->title }}</td>
-                <td>{{ $n->description }}</td>
+                <td>{{ $article->title }}</td>
+                <td>{{ $article->description }}</td>
                 <td>
-                    <form action="{{ route('admin.news.destroy',$n->id) }}" method="POST">
-                        <a class="btn btn-info" href="{{ route('show',$n->id) }}">Show</a>
-                        <a class="btn btn-primary" href="{{ route('admin.news.edit',$n->id) }}">Edit</a>
+                    <form action="{{ route('admin.article.destroy',$article->id) }}" method="POST">
+                        <a class="btn btn-info" href="{{ route('show',$article->id) }}">Show</a>
+                        <a class="btn btn-primary" href="{{ route('admin.article.edit',$article->id) }}">Edit</a>
                         @csrf
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
@@ -39,7 +42,7 @@
         @endforeach
     </table>
 
-    {!! $news->links() !!}
+    {!! $articles->links() !!}
 
 
 @endsection

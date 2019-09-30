@@ -39,5 +39,9 @@ class ImportComments extends Command
     public function handle()
     {
         $legacyComments = DB::table('wm11585_25data.sed_com')->select()->get();
+        $legacyComments->each(function (&$item){
+            $item->com_code = (int)trim($item->com_code, 'p');
+        });
+
     }
 }

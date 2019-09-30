@@ -29,7 +29,7 @@ class AdminController extends Controller
      * @return Response
      */
 
-    public function storeNews(Request $request)
+    public function storeArticle(Request $request)
     {
         $request->validate([
             'title' => 'required',
@@ -41,7 +41,7 @@ class AdminController extends Controller
         $text = htmlspecialchars((string)$request->only('text'));
         $author = Auth::user()->name;
 
-        DB::table('news')->insert(
+        DB::table('articles')->insert(
             array(
                 'title' => $title,
                 'description' => $description,
@@ -60,21 +60,23 @@ class AdminController extends Controller
      * @return Response
      */
 
-    public function create()
+    public function createArticle()
     {
-        return view('news.create');
+        return view('article.create');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Article $news
+     * @param int $id
      * @return Response
      */
 
-    public function editNews(Article $news)
+    public function editArticle(int $id)
     {
-        return view('news.edit',compact('news'));
+        $article = Article::find($id);
+
+        return view('article.edit',compact('article'));
     }
 
 
@@ -83,18 +85,18 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request $request
-     * @param Article $news
+     * @param Article $article
      * @return Response
      */
 
-    public function updateNews(Request $request, Article $news)
+    public function updateArticle(Request $request, Article $article)
     {
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
         ]);
 
-        $news->update($request->all());
+        $article->update($request->all());
 
         return redirect()->route('admin.dashboard')
             ->with('success','Article updated successfully');
@@ -103,15 +105,15 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Article $news
+     * @param Article $article
      * @return Response
      *
      * @throws \Throwable
      */
 
-    public function destroyNews(Article $news)
+    public function destroyArticle(Article $article)
     {
-        $news->delete();
+        $article->delete();
 
         return redirect()->route('admin.dashboard')
             ->with('success','Article deleted successfully');
