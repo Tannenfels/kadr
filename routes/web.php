@@ -26,11 +26,13 @@ Route::get('/users/{id}', 'UserController@show')->name('user.show')->middleware(
 Route::middleware('admin')->group(function () {
     Route::get('/admin', 'AdminController@dashboard')->name('admin.dashboard');
 
-    Route::get('/admin/destroy', 'AdminController@destroyNews')->name('admin.news.destroy');
-    Route::get('/admin/edit_article/{id}', 'AdminController@editNews')->name('admin.news.edit');
-    Route::post('/admin/create_article', 'AdminController@storeNews')->name('admin.news.store');
+    Route::get('/admin/destroy', 'AdminController@destroyArticle')->name('admin.article.destroy');
+    Route::post('/admin/store_article', 'AdminController@storeArticle')->name('admin.article.store');
+    Route::post('/admin/create_article', 'AdminController@createArticle')->name('admin.article.create');
+    Route::post('/admin/article/update', 'AdminController@updateUser')->name('admin.article.update');
+    Route::get('/admin/edit_article/{id}', 'AdminController@editArticle')->name('admin.article.edit');
 
     Route::get('/admin/users', 'AdminController@usersDashboard')->name('admin.user.dashboard');
     Route::get('/admin/users/{id}', 'AdminController@editUser')->name('admin.user.edit');
-    Route::get('/admin/users/update', 'AdminController@updateUser')->name('admin.user.update');
+    Route::post('/admin/users/update', 'AdminController@updateUser')->name('admin.user.update');
 });

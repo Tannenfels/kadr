@@ -23,17 +23,17 @@
             <th>Описание</th>
         </tr>
 
-        @foreach ($news as $n)
+        @foreach ($articles as $article)
             <tr>
-                <td>{{ $n->title }}</td>
-                <td>{{ $n->description }}</td>
+                <td>{{ $article->title }}</td>
+                <td>{{ $article->description }}</td>
                 <td>
-                    <a class="btn btn-info" href="{{ route('show',$n->id) }}">Show</a>
+                    <a class="btn btn-info" href="{{ route('show',$article->id) }}">Show</a>
                 </td>
             </tr>
         @endforeach
     </table>
 
-    {!! $news->links() !!}
+    {!! $articles->links() !!}
 
 @endsection

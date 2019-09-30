@@ -20,8 +20,8 @@ class ArticleController extends Controller
 
 
     public function list(){
-        $news = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
-        return view('news.list', compact('news'));
+        $articles = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        return view('article.list', compact('articles'));
     }
 
     /**
@@ -39,7 +39,7 @@ class ArticleController extends Controller
 
         $article->text = $bbCode->convertToHtml($article->text);
 
-        return view('news.show',compact('article'));
+        return view('article.show',compact('article'));
     }
 
     /**
@@ -76,7 +76,7 @@ class ArticleController extends Controller
         $articleId = htmlspecialchars((int)$request->only('article_id'));
         $author = Auth::user()->name;
 
-        DB::table('news')->insert(
+        DB::table('comments')->insert(
             array(
                 'text' => $text,
                 'author' => $author,
