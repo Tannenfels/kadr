@@ -28,7 +28,7 @@ Route::middleware('admin')->group(function () {
 
     Route::get('/admin/destroy', 'AdminController@destroyArticle')->name('admin.article.destroy');
     Route::post('/admin/store_article', 'AdminController@storeArticle')->name('admin.article.store');
-    Route::post('/admin/create_article', 'AdminController@createArticle')->name('admin.article.create');
+    Route::get('/admin/create_article', 'AdminController@createArticle')->name('admin.article.create');
     Route::post('/admin/article/update', 'AdminController@updateUser')->name('admin.article.update');
     Route::get('/admin/edit_article/{id}', 'AdminController@editArticle')->name('admin.article.edit');
 
