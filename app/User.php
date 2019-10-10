@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -43,12 +46,23 @@ class User extends Authenticatable
     protected $table = 'users';
 
     /**
+     * @var array
+     */
+    protected $with = ['roles', 'currentBan'];
+
+    /**
+     * @deprecated
+     * @param User $user
      * @return bool
      */
     public function isAdmin(User $user){
         return in_array('admin', explode(',', Auth::user()->user_groups));
     }
 
+    /**
+     * @deprecated
+     * @return bool
+     */
     public function isChiefEditor(){
         if (Auth::user() && in_array('admin', explode(',', Auth::user()->user_groups))){
             return true;
@@ -56,15 +70,24 @@ class User extends Authenticatable
         return in_array('chief_editor', explode(',', Auth::user()->user_groups));
     }
 
-    public function isAuthor(){
-
-    }
-
-    public function isEditor(){
-
-    }
-
+    /**
+     * @deprecated
+     */
     public function isBanned(){
 
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function roles(){
+        return $this->belongsToMany('App\Role', 'roles_users', 'user_id', 'role_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function currentBan(){
+        return $this->hasMany('App\Ban')->whereTime('expires', '>', Carbon::now())->orWhere('is_permanent', 1);
     }
 }
