@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\Comment;
-use App\User;
 use Genert\BBCode\BBCode;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Factory|View
      */
 
 
@@ -29,7 +29,7 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return Factory|View
      */
 
     public function show(int $id)
@@ -47,7 +47,7 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function legacyPluginShow(int $id)
@@ -59,7 +59,7 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function legacyUnpluginedShow(Request $request)

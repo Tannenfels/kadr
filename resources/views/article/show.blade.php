@@ -29,4 +29,18 @@
         </div>
     </div>
 
+    <table class="table table-bordered">
+        <tr>
+            <th>Имя</th>
+            <th>Текст</th>
+        </tr>
+
+        @foreach ($article->comments as $comment)
+            <tr>
+                <td>{{ $comment->user_id }}</td>
+                <td>{{ $comment->text }}</td>
+            </tr>
+        @endforeach
+    </table>
+
 @endsection
