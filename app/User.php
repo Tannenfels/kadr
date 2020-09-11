@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -71,10 +72,17 @@ class User extends Authenticatable
     }
 
     /**
-     * @deprecated
+     * @return bool
      */
     public function isBanned(){
+        $ban = Ban::findOrFail($this->id);
 
+        if ((empty($ban) || (Carbon::createFromTimeString($ban->expires)->greaterThanOrEqualTo(Carbon::now()) && $ban->expires === 0))) {
+            return false;
+        } elseif ($ban->is_permanent === 1 || Carbon::createFromTimeString($ban->expires)->lessThan(Carbon::now())) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -89,5 +97,13 @@ class User extends Authenticatable
      */
     public function currentBan(){
         return $this->hasMany('App\Ban')->whereTime('expires', '>', Carbon::now())->orWhere('is_permanent', 1);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne('App\Profile', 'user_id', 'id');
     }
 }

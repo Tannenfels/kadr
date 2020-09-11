@@ -20,13 +20,10 @@ class Article extends Model
      */
     protected $table = 'articles';
 
-    public function comments()
-    {
-        return $this->hasMany('App\Comment');
-    }
+    protected $with = ['commentThreads'];
 
     public function commentThreads()
     {
-        return $this->hasMany('App\CommentThreads');
+        return $this->hasMany('App\CommentThread');
     }
 }

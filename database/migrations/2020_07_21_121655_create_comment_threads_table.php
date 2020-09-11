@@ -16,6 +16,7 @@ class CreateCommentThreadsTable extends Migration
         Schema::create('comment_threads', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('article_id')->nullable(false);
+            $table->unsignedBigInteger('user_id');
             $table->string('author_ip');
             $table->text('text');
             $table->timestamps();
@@ -30,7 +31,7 @@ class CreateCommentThreadsTable extends Migration
             $table->unsignedBigInteger('thread_id')->nullable(false);
         });
 
-        Schema::table('comment_threads', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->foreign('thread_id')->references('id')->on('comment_threads');
         });
     }

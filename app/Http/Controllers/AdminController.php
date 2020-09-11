@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 use Illuminate\View\View;
 use App\User;
+use Throwable;
 
 class AdminController extends Controller
 {
@@ -26,11 +30,15 @@ class AdminController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function storeArticle(Request $request)
     {
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $request->validate([
             'title' => 'required',
             'text' => 'required',
@@ -57,7 +65,7 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|Response|View
      */
 
     public function createArticle()
@@ -69,7 +77,7 @@ class AdminController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return Response
+     * @return Application|Factory|Response|View
      */
 
     public function editArticle(int $id)
@@ -86,7 +94,7 @@ class AdminController extends Controller
      *
      * @param  Request $request
      * @param Article $article
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function updateArticle(Request $request, Article $article)
@@ -106,9 +114,9 @@ class AdminController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Article $article
-     * @return Response
+     * @return RedirectResponse
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
 
     public function destroyArticle(Article $article)

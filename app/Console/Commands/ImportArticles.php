@@ -7,14 +7,14 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ImportUsers extends Command
+class ImportArticles extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'users:import';
+    protected $signature = 'articles:import';
 
     /**
      * The console command description.
@@ -41,21 +41,17 @@ class ImportUsers extends Command
     public function handle()
     {
         try {
-            $legacyUsers = DB::table('wm11585_25data.sed_users')->select()->get();
+            $legacyArticles = DB::table('wm11585_25data.sed_pages')->select()->get();
 
-
-
-            //$2y$10$i0US3SQLeJ17lUyvxKIPyuKC6JttVmlH.KVhcm3H7HO5ovIiAeu8y
-
-            foreach ($legacyUsers as $legacyUser) {
-                DB::table('users')->insert(
+            foreach ($legacyArticles as $legacyArticle) {
+                DB::table('comment_threads')->insert(
                     [
-                        'id' => $legacyUser->user_id,
-                        'name' => $legacyUser->user_name,
-                        'email' => $legacyUser->user_email,
-                        'password' => $legacyUser->user_password,
-                        'created_at' => Carbon::createFromTimestamp($legacyUser->user_regdate)->toDateTimeString(),
-                        'email_verified_at' => Carbon::now()->toDateTimeString()
+                        'id' => $legacyArticle->page_id,
+                        'article_id' => $legacyArticle->page_code,
+                        'user_id' => $legacyArticle->page_authorid,
+                        'author_ip' => $legacyArticle->page_authorip,
+                        'text' => $legacyArticle->page_text,
+                        'created_at' => Carbon::createFromTimestamp($legacyArticle->page_date)->toDateTimeString()
                     ]
                 );
             }

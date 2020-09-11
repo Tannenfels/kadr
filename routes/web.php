@@ -22,6 +22,7 @@ Route::get('/', 'ArticleController@list')->name('home');
 Route::redirect('/home', '/');
 Route::get('/admin', 'AdminController@dashboard')->middleware('admin');
 Route::get('/users/{id}', 'UserController@show')->name('user.show')->middleware('auth');
+Route::post('/comment_threads/store', 'ArticleController@storeCommentThread')->name('commentThreads.store')->middleware('auth');
 Route::get('/forum', 'ForumController@list')->name('forum.list');
 Route::get('/forum/{category}', 'ForumController@showCategory')->name('forum.category.show');
 
