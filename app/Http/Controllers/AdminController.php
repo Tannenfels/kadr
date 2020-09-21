@@ -13,17 +13,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\View\View;
 use App\User;
-use Throwable;
 
 class AdminController extends Controller
 {
     /**
-     * @param Request $request
      * @return Factory|View
      */
-    public function dashboard(Request $request){
-        $news = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
-        return view('admin.dashboard', compact('news'));
+    public function dashboard(){
+        $articles = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.dashboard', compact('articles'));
     }
 
     /**
@@ -82,27 +80,28 @@ class AdminController extends Controller
 
     public function editArticle(int $id)
     {
-        $article = Article::find($id);
+        $article = Article::findOrFail($id);
 
         return view('article.edit',compact('article'));
     }
 
 
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request $request
-     * @param Article $article
+     * @param Request $request
+     * @param int $id
      * @return RedirectResponse
      */
 
-    public function updateArticle(Request $request, Article $article)
+    public function updateArticle(Request $request, int $id)
     {
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
         ]);
+
+        $article = Article::findOrFail($id);
 
         $article->update($request->all());
 
@@ -113,14 +112,14 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Article $article
+     * @param int $id
      * @return RedirectResponse
      *
-     * @throws Throwable
      */
 
-    public function destroyArticle(Article $article)
+    public function destroyArticle(int $id)
     {
+        $article = Article::findOrFail($id);
         $article->delete();
 
         return redirect()->route('admin.dashboard')
@@ -128,21 +127,20 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Factory|View
      */
-    public function usersDashboard(Request $request){
+    public function usersDashboard(){
         $users = User::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('admin.usersDashboard', compact('users'));
     }
 
     /**
-     * @param User $user
+     * @param int $id
      * @return Factory|View
      */
-    public function editUser(User $user){
-        $id = $user->id;
+    public function editUser(int $id){
+        $user = User::findOrFail($id);
 
-        return view('editUser', compact('id'));
+        return view('editUser', compact('user'));
     }
 }
