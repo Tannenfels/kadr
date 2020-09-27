@@ -68,6 +68,10 @@ class AdminController extends Controller
 
     public function createArticle()
     {
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         return view('article.create');
     }
 
@@ -80,6 +84,10 @@ class AdminController extends Controller
 
     public function editArticle(int $id)
     {
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $article = Article::findOrFail($id);
 
         return view('article.edit',compact('article'));
@@ -96,6 +104,10 @@ class AdminController extends Controller
 
     public function updateArticle(Request $request, int $id)
     {
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $request->validate([
             'name' => 'required',
             'detail' => 'required',
@@ -119,6 +131,10 @@ class AdminController extends Controller
 
     public function destroyArticle(int $id)
     {
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $article = Article::findOrFail($id);
         $article->delete();
 
@@ -130,6 +146,10 @@ class AdminController extends Controller
      * @return Factory|View
      */
     public function usersDashboard(){
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $users = User::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
         return view('admin.usersDashboard', compact('users'));
     }

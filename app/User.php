@@ -52,11 +52,11 @@ class User extends Authenticatable
     protected $with = ['roles', 'currentBan'];
 
     /**
-     * @deprecated
-     * @param User $user
+     * @param int $id
      * @return bool
+     * @deprecated
      */
-    public function isAdmin(User $user){
+    public function isAdmin(){
         return in_array('admin', explode(',', Auth::user()->user_groups));
     }
 
