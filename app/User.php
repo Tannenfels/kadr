@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
@@ -49,7 +48,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $with = ['roles', 'currentBan'];
+    protected $with = ['currentBan'];
 
     /**
      * @param int $id
@@ -77,19 +76,19 @@ class User extends Authenticatable
     public function isBanned(){
         $ban = Ban::findOrFail($this->id);
 
-        if ((empty($ban) || (Carbon::createFromTimeString($ban->expires)->greaterThanOrEqualTo(Carbon::now()) && $ban->expires === 0))) {
+        if (
+            (empty($ban)
+            ||
+            (Carbon::createFromTimeString($ban->expires)->greaterThanOrEqualTo(Carbon::now()) &&
+                $ban->expires === 0 &&
+                $ban->is_permanent === 0)
+            )
+        ) {
             return false;
         } elseif ($ban->is_permanent === 1 || Carbon::createFromTimeString($ban->expires)->lessThan(Carbon::now())) {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function roles(){
-        return $this->belongsToMany('App\Role', 'roles_users', 'user_id', 'role_id');
     }
 
     /**

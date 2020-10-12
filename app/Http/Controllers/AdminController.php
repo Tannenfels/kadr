@@ -16,6 +16,8 @@ use App\User;
 
 class AdminController extends Controller
 {
+    public const ADMIN_ACCESS = [1];
+
     /**
      * @return Factory|View
      */

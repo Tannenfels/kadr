@@ -16,4 +16,18 @@ class Profile extends Model
     {
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    public static function createNewProfile(int $userId)
+    {
+        $profile = new self;
+        $profile->user_id = $userId;
+
+        $profile->save();
+
+        return true;
+    }
 }
