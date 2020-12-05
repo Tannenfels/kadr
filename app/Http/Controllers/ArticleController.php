@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\Comment;
-use App\User;
-use Genert\BBCode\BBCode;
+use App\Classes\CommonConstants;
+use App\Classes\CustomBBCodeApplier;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Factory|View
      */
 
 
     public function list(){
-        $articles = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        $articles = Article::query()->orderBy('id', 'DESC')->paginate(10);
         return view('article.list', compact('articles'));
     }
 
@@ -29,16 +32,14 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return Factory|View
      */
 
     public function show(int $id)
     {
-        $article = Article::findOrFail($id);
+        $article = Article::query()->findOrFail($id);
 
-        $bbCode = new BBCode();
-
-        $article->text = $bbCode->convertToHtml($article->text);
+        $article->text = CustomBBCodeApplier::apply($article->text);
 
         return view('article.show',compact('article'));
     }
@@ -46,8 +47,9 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
+     * DO NOT TOUCH!
      * @param int $id
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function legacyPluginShow(int $id)
@@ -58,8 +60,9 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
+     * DO NOT TOUCH!
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
 
     public function legacyUnpluginedShow(Request $request)
@@ -68,20 +71,62 @@ class ArticleController extends Controller
         return redirect()->route('show', ['id' => $id]);
     }
 
-    public function storeComment(Request $request){
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeCommentThread(Request $request){
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
         $request->validate([
             'text' => 'required',
             'article_id' => 'required'
         ]);
-        $text = htmlspecialchars((string)$request->only('text'));
-        $articleId = htmlspecialchars((int)$request->only('article_id'));
-        $author = Auth::user()->name;
+
+        $text = htmlspecialchars((string)$request->only('text')['text']);
+        $articleId = htmlspecialchars((int)$request->only('article_id')['article_id']);
+        $author = Auth::user()->id;
+
+        DB::table('comment_threads')->insert(
+            array(
+                'text' => $text,
+                'user_id' => $author,
+                'article_id' => $articleId,
+                'created_at' => Carbon::now(CommonConstants::TIMEZONE_TEXT)->toDateTimeString(),
+                'author_ip' => $request->ip()
+            )
+        );
+
+        return back();
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeComment(Request $request){
+
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
+
+        $request->validate([
+            'text' => 'required',
+            'thread_id' => 'required'
+        ]);
+        $text = htmlspecialchars((string)$request->only('text')['text']);
+        $threadId = htmlspecialchars((int)$request->only('thread_id')['thread_id']);
+        $author = Auth::user()->id;
 
         DB::table('comments')->insert(
             array(
                 'text' => $text,
-                'author' => $author,
-                'article_id' => $articleId
+                'user_id' => $author,
+                'thread_id' => $threadId,
+                'created_at' => Carbon::now(CommonConstants::TIMEZONE_TEXT)->toDateTimeString(),
+                'author_ip' => $request->ip()
             )
         );
 
@@ -89,13 +134,17 @@ class ArticleController extends Controller
     }
 
     public function editComment(Request $request){
+
+        if (!Auth::check()) {
+            throw new UnauthorizedException();
+        }
         $request->validate([
             'text' => 'required',
             'comment_id' => 'required'
         ]);
     }
 
-    public function deleteComment(){
+    public function deleteComment(int $commentId){
 
     }
 }

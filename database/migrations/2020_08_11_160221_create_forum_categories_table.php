@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNewsTable extends Migration
+class CreateForumCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateNewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('forum_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
+            $table->string('name');
             $table->string('description');
-            $table->longText('text');
-            $table->string('author');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->integer('order');
+            $table->string('subcategory');
+            $table->tinyInteger('is_active')->default(1);
+            $table->string('icon');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('forum_categories');
     }
 }

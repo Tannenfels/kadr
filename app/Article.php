@@ -19,4 +19,11 @@ class Article extends Model
      * @var string
      */
     protected $table = 'articles';
+
+    protected $with = ['commentThreads'];
+
+    public function commentThreads()
+    {
+        return $this->hasMany('App\CommentThread');
+    }
 }

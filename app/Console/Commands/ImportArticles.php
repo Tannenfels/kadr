@@ -3,19 +3,19 @@
 namespace App\Console\Commands;
 
 use App\Classes\CommonConstants;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
-class ImportComments extends Command
+class ImportArticles extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'comments:import';
+    protected $signature = 'articles:import';
 
     /**
      * The console command description.
@@ -42,21 +42,17 @@ class ImportComments extends Command
     public function handle()
     {
         try {
-            $legacyComments = DB::table('wm11585_25data.sed_com')->select()->get();
-            $legacyComments->each(function (&$item) {
-                $item->com_code = (int)trim($item->com_code, 'p');
-            });
+            $legacyArticles = DB::table('wm11585_25data.sed_pages')->select()->get();
 
-
-            foreach ($legacyComments as $legacyComment) {
-                DB::table('comment_threads')->insertOrIgnore(
+            foreach ($legacyArticles as $legacyArticle) {
+                DB::table('articles')->insert(
                     [
-                        'id' => $legacyComment->com_id,
-                        'article_id' => $legacyComment->com_code,
-                        'user_id' => $legacyComment->com_authorid,
-                        'author_ip' => $legacyComment->com_authorip,
-                        'text' => $legacyComment->com_text,
-                        'created_at' => Carbon::createFromTimestamp($legacyComment->com_date, CommonConstants::TIMEZONE_TEXT)->toDateTimeString()
+                        'id' => $legacyArticle->page_id,
+                        'title' => $legacyArticle->page_title,
+                        'user_id' => $legacyArticle->page_authorid,
+                        'author_ip' => $legacyArticle->page_authorip,
+                        'text' => $legacyArticle->page_text,
+                        'created_at' => Carbon::createFromTimestamp($legacyArticle->page_date, CommonConstants::TIMEZONE_TEXT)->toDateTimeString()
                     ]
                 );
             }

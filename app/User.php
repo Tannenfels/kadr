@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
@@ -48,14 +48,14 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $with = ['roles', 'currentBan'];
+    protected $with = ['currentBan', 'profile'];
 
     /**
-     * @deprecated
-     * @param User $user
+     * @param int $id
      * @return bool
+     * @deprecated
      */
-    public function isAdmin(User $user){
+    public function isAdmin(){
         return in_array('admin', explode(',', Auth::user()->user_groups));
     }
 
@@ -71,17 +71,24 @@ class User extends Authenticatable
     }
 
     /**
-     * @deprecated
+     * @return bool
      */
     public function isBanned(){
+        $ban = Ban::findOrFail($this->id);
 
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function roles(){
-        return $this->belongsToMany('App\Role', 'roles_users', 'user_id', 'role_id');
+        if (
+            (empty($ban)
+            ||
+            (Carbon::createFromTimeString($ban->expires)->greaterThanOrEqualTo(Carbon::now()) &&
+                $ban->expires === 0 &&
+                $ban->is_permanent === 0)
+            )
+        ) {
+            return false;
+        } elseif ($ban->is_permanent === 1 || Carbon::createFromTimeString($ban->expires)->lessThan(Carbon::now())) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -89,5 +96,13 @@ class User extends Authenticatable
      */
     public function currentBan(){
         return $this->hasMany('App\Ban')->whereTime('expires', '>', Carbon::now())->orWhere('is_permanent', 1);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne('App\Profile', 'user_id', 'id');
     }
 }

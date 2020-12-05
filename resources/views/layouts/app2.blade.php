@@ -75,17 +75,7 @@
 
         <main class="py-4">
             <div class="container">
-                <div id="list-wrapper">
-                    <div align="left">
-                        @yield('content')
-                        <div align="right">
-                            <div id="right-categories" class="right-categories">
-                                <div>11212</div>
-                            </div>
-                        </div>
-                    </div>+
-                </div>
-
+                @yield('content')
             </div>
         </main>
     </div>
