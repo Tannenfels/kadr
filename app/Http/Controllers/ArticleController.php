@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Classes\CommonConstants;
 use App\Classes\CustomBBCodeApplier;
 use Carbon\Carbon;
-use Genert\BBCode\BBCode;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,11 +39,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        $bbCode = new BBCode();
-
-        CustomBBCodeApplier::apply($bbCode);
-
-        $article->text = $bbCode->convertToHtml($article->text);
+        $article->text = CustomBBCodeApplier::apply($article->text);
 
         return view('article.show',compact('article'));
     }
@@ -98,7 +94,7 @@ class ArticleController extends Controller
                 'text' => $text,
                 'user_id' => $author,
                 'article_id' => $articleId,
-                'created_at' => Carbon::now()->toDateTimeString(),
+                'created_at' => Carbon::now(CommonConstants::TIMEZONE_TEXT)->toDateTimeString(),
                 'author_ip' => $request->ip()
             )
         );
@@ -129,7 +125,7 @@ class ArticleController extends Controller
                 'text' => $text,
                 'user_id' => $author,
                 'thread_id' => $threadId,
-                'created_at' => Carbon::now()->toDateTimeString(),
+                'created_at' => Carbon::now(CommonConstants::TIMEZONE_TEXT)->toDateTimeString(),
                 'author_ip' => $request->ip()
             )
         );
@@ -148,7 +144,7 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function deleteComment(){
+    public function deleteComment(int $commentId){
 
     }
 }

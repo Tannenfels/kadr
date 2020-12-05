@@ -9,7 +9,7 @@ class CustomBBCodeApplier
     /**
      * @param BBCode $bbCode
      */
-    public static function apply(BBCode $bbCode):void
+    private static function applyCustomCodes(BBCode $bbCode):void
     {
         $bbCode->addParser(
             'center',
@@ -38,5 +38,18 @@ class CustomBBCodeApplier
             '<div style="text-align:right;">$1</div>',
             '$1'
         );
+    }
+
+    /**
+     * @param string $entity
+     * @return string
+     */
+    public static function apply(string $entity)
+    {
+        $bbCodeEntity = new BBCode();
+
+        self::applyCustomCodes($bbCodeEntity);
+
+        return $bbCodeEntity->convertToHtml($entity);
     }
 }

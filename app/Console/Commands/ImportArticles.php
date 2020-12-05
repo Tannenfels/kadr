@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\CommonConstants;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
@@ -44,14 +45,14 @@ class ImportArticles extends Command
             $legacyArticles = DB::table('wm11585_25data.sed_pages')->select()->get();
 
             foreach ($legacyArticles as $legacyArticle) {
-                DB::table('comment_threads')->insert(
+                DB::table('articles')->insert(
                     [
                         'id' => $legacyArticle->page_id,
-                        'article_id' => $legacyArticle->page_code,
+                        'title' => $legacyArticle->page_title,
                         'user_id' => $legacyArticle->page_authorid,
                         'author_ip' => $legacyArticle->page_authorip,
                         'text' => $legacyArticle->page_text,
-                        'created_at' => Carbon::createFromTimestamp($legacyArticle->page_date)->toDateTimeString()
+                        'created_at' => Carbon::createFromTimestamp($legacyArticle->page_date, CommonConstants::TIMEZONE_TEXT)->toDateTimeString()
                     ]
                 );
             }

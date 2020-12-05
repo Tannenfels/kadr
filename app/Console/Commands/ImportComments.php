@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\CommonConstants;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -55,7 +56,7 @@ class ImportComments extends Command
                         'user_id' => $legacyComment->com_authorid,
                         'author_ip' => $legacyComment->com_authorip,
                         'text' => $legacyComment->com_text,
-                        'created_at' => Carbon::createFromTimestamp($legacyComment->com_date)->toDateTimeString()
+                        'created_at' => Carbon::createFromTimestamp($legacyComment->com_date, CommonConstants::TIMEZONE_TEXT)->toDateTimeString()
                     ]
                 );
             }

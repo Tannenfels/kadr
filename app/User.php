@@ -48,7 +48,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $with = ['currentBan'];
+    protected $with = ['currentBan', 'profile'];
 
     /**
      * @param int $id

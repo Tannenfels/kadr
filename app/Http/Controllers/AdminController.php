@@ -16,6 +16,10 @@ use App\User;
 
 class AdminController extends Controller
 {
+    /**
+     * @const array
+     * IDs of roles_users entities eligible for accessing admin panel
+     */
     public const ADMIN_ACCESS = [1];
 
     /**
