@@ -24,7 +24,7 @@ class ArticleController extends Controller
 
 
     public function list(){
-        $articles = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        $articles = Article::query()->orderBy('id', 'DESC')->paginate(10);
         return view('article.list', compact('articles'));
     }
 
@@ -37,7 +37,7 @@ class ArticleController extends Controller
 
     public function show(int $id)
     {
-        $article = Article::findOrFail($id);
+        $article = Article::query()->findOrFail($id);
 
         $article->text = CustomBBCodeApplier::apply($article->text);
 

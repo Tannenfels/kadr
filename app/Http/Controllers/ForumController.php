@@ -24,7 +24,7 @@ class ForumController extends Controller
 
     public function showThread(int $id)
     {
-        $post = ForumThread::findOrFail($id);
+        $post = ForumThread::query()->findOrFail($id);
 
         $post->text = CustomBBCodeApplier::apply($post->text);
 

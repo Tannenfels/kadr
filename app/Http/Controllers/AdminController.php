@@ -26,7 +26,7 @@ class AdminController extends Controller
      * @return Factory|View
      */
     public function dashboard(){
-        $articles = Article::whereRaw(1)->orderBy('id', 'DESC')->paginate(10);
+        $articles = Article::query()->orderBy('id', 'DESC')->paginate(10);
         return view('admin.dashboard', compact('articles'));
     }
 
